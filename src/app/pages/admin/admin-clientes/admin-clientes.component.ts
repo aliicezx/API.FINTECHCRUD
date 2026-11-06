@@ -16,14 +16,22 @@ export class AdminClientesComponent implements OnInit {
   listaClientes:Cliente[] = [];
 
   ngOnInit():void{
-    this.listaClientes = this.service.listar();
+    this.service.listar().subscribe({
+      next: (clientes)=>{
+        this.listaClientes = clientes;
+      }
+    });
   }
 
-  editar(id: number) {
+  editar(id: string) {
     console.log('Editar cliente:', id);
   }
 
-  excluir(id: number) {
-    console.log('Excluir cliente:', id);
+  excluir(id: string) {
+    this.service.excluir(id).subscribe({
+      next: ()=>{
+         this.listaClientes = this.listaClientes.filter(cliente=>cliente.id !== id);
+      }
+    });
   }
 }
